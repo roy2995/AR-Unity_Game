@@ -22,6 +22,7 @@ public class QRcodeGenerator : MonoBehaviour
     private void Start()
     {
         storedEncodedTexture = new Texture2D(256, 256);
+        Debug.Log(Application.dataPath);
     }
 
     private Color32[] Encode(string textToEncoding, int width, int height)
@@ -56,7 +57,7 @@ public class QRcodeGenerator : MonoBehaviour
         storedEncodedTexture.Apply();
 
         imageReceiver.texture = storedEncodedTexture;
-
+        SaveToImage.SaveTexture2DToFile(storedEncodedTexture, Application.dataPath + "/Resources/QR Images/" + qrString, SaveToImage.SaveTextureFileFormat.PNG);
     }
 
 }
