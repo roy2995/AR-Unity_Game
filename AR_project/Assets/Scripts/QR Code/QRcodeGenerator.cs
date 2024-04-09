@@ -5,14 +5,13 @@ using System.Globalization;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Sirenix.OdinInspector;
 using ZXing;
 using ZXing.QrCode;
 
 
 public class QRcodeGenerator : MonoBehaviour
 {
-    [Header("QR Code Generator")]
-    [SerializeField] private GameObject qrPrefab;
     [SerializeField] private string qrString;
 
     [Header("QR Code Settings")]
@@ -39,8 +38,10 @@ public class QRcodeGenerator : MonoBehaviour
         return writer.Write(textToEncoding);
     }
 
+    [Button("Encode")]
     public void OnClickEncode()
     {
+        storedEncodedTexture = new Texture2D(256, 256);
         EncodeTextToQR();
     }
 
@@ -49,14 +50,13 @@ public class QRcodeGenerator : MonoBehaviour
         if (storedEncodedTexture == null)
         {
             Debug.LogError("String value it's null");
-            // string textWrite = string.IsNullOrEmpty(qrString)? "Null" : qrString;
+            return;
         }
 
         Color32[] pixelTexture = Encode(qrString, storedEncodedTexture.width, storedEncodedTexture.height);
         storedEncodedTexture.SetPixels32(pixelTexture);
         storedEncodedTexture.Apply();
 
-        imageReceiver.texture = storedEncodedTexture;
         SaveToImage.SaveTexture2DToFile(storedEncodedTexture, Application.dataPath + "/Resources/QR Images/" + qrString, SaveToImage.SaveTextureFileFormat.PNG);
     }
 
